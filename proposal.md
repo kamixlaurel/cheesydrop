@@ -1,25 +1,30 @@
 # Project Proposal Title
-Cheesy Drop (Interactive School Bus Routing System)
+Cheesy Drop (Interactive School Service Routing System)
 
 ## Project Concept
-A school bus support system that suggests the best route in picking up their students and helps them manage their attendance. 
+A school service support system that suggests the best route in picking up their students and helps them manage their attendance. 
 
 ### Statement of the Problem
-1. Unoptimized bus route due to missed pickups or delays 
-2. Undertermined location of the student's designated bus
+Will answer questions such as:
+1. Unoptimized school service route due to missed pickups or delays 
+2. Undetermined location of the student's designated school service
 
 ### Proposed Solution
 The app will provide the following solution:
-1. Shows the status of the student if they're still preparing or ready to go.
-2. Real time tracking of the school bus along with the driver and bus information.
+1. Shows the status of the student if they're still preparing, ready to go or not attending.
+2. Real time tracking of the school service location along with the driver and service information.
 
 ### Target Users
-This is where you state the users of your app. You can enumerate them if you're targetting several groups, along with a description that corresponds to their usage of the solution.
+The target users of this application are school service drivers (or companies) and parents of the enlisted students.
 
 ### Benefits
-This is where you discuss the benefits of your solution. You basically have to justify the advantages of your solution over the problem itself.
+  1. The school service route optimization reduces turnaround time and fuel consumption.
+  2. Gives convenience to the drivers and parents.
+  3. The systematize approach provides accurate drop-off time.
+  4. The tracking features ensures safety of the students.  
 
-*Note that benefits doesn't always have to be just for the target users. (ex. if you're creating an API for your application, it could also benefit other developers as well even if they're not your target)*
+*Note that benefits doesn't always have to be just for the target users. (ex. if you're creating an API for your application, it could also benefit other developers as well even if they're not your target) - Sir*
+*Note for Jobea and Averos: Di ko muna dinilete yung note ni sir about sa API. If meron/wala, pa delete nalang po nitong note ko and nung note ni sir. - Kami*
 
 ## Group Members
 - Laurel, Kamille Rose C. (Project Manager)
