@@ -1,8 +1,7 @@
-# Project Proposal Title
-Cheesy Drop (Interactive School Service Routing System)
+# Cheesy Drop
+Interactive School Service Routing System
 
-## Project Concept
-A school service system that allows the designated drivers to take track of the best possible route in picking up listed students as well as providing a parent-driver interaction through messaging, reminders and notification alerts.
+## A school service system that allows the designated drivers to take track of the best possible route in picking up listed students as well as providing a parent-driver interaction through messaging, reminders and notification alerts.
 
 ### Statement of the Problem
 Will answer questions such as:
