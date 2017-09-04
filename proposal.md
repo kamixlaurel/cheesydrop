@@ -1,8 +1,7 @@
-# Project Proposal Title
-Cheesy Drop (Interactive School Service Routing System)
+# Cheesy Drop
+Interactive School Service Routing System
 
-## Project Concept
-A school service system that allows the designated drivers to take track of the best possible route in picking up listed students as well as providing a parent-driver interaction through messaging, reminders and notification alerts.
+## A school service system that allows the designated drivers to take track of the best possible route in picking up listed students as well as providing a parent-driver interaction through messaging, reminders and notification alerts.
 
 ### Statement of the Problem
 Will answer questions such as:
@@ -22,10 +21,6 @@ The target users of this application are school service drivers (or companies) a
   2. The school service route optimization reduces turnaround time.
   3. The systematize approach provides accurate drop-off time of the students.
   4. The tracking feature ensures the safety and timely transit of the students when they arrive to school and back home. 
-
-*Note that benefits doesn't always have to be just for the target users. (ex. if you're creating an API for your application, it could also benefit other developers as well even if they're not your target) - Sir*
-
-*Note for Jobea and Averos: Di ko muna dinilete yung note ni sir about sa API. If meron/wala, pa delete nalang po nitong note ko and nung note ni sir. - Kami*
 
 ## Group Members
 - Laurel, Kamille Rose C. (Project Manager)
