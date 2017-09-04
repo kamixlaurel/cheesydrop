@@ -1,14 +1,17 @@
 # Project Proposal Title
+Cheesy Drop (Interactive School Bus Routing System)
 
 ## Project Concept
+A school bus support system that suggests the best route in picking up their students and helps them manage their attendance. 
 
 ### Statement of the Problem
-Here you give an introduction to the problem you're trying to solve. Don't be tempted to discuss your proposed solution here.
+1. Unoptimized bus route due to missed pickups or delays 
+2. Undertermined location of the student's designated bus
 
 ### Proposed Solution
-This is the right section where you discuss your proposed solution to the problem. It can either be a first of its kind or an improvement to an existing solution.
-
-Also, you can opt to list the main features of your proposed solution here, discussing them briefly.
+The app will provide the following solution:
+1. Shows the status of the student if they're still preparing or ready to go.
+2. Real time tracking of the school bus along with the driver and bus information.
 
 ### Target Users
 This is where you state the users of your app. You can enumerate them if you're targetting several groups, along with a description that corresponds to their usage of the solution.
