@@ -4617,6 +4617,10 @@ rimraf@~2.4.0:
   dependencies:
     glob "^6.0.1"
 
+rn-viewpager@^1.2.4:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/rn-viewpager/-/rn-viewpager-1.2.4.tgz#1d572709d083d7ed28f0c03d2794e128726241b9"
+
 rndm@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/rndm/-/rndm-1.2.0.tgz#f33fe9cfb52bbfd520aa18323bc65db110a1b76c"
