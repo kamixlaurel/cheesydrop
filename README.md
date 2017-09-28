@@ -23,8 +23,8 @@ The target users of this application are school service drivers (or companies) a
   4. The tracking feature ensures the safety and timely transit of the students when they arrive to school and back home. 
 
 ## Group Members
-- Laurel, Kamille Rose C. (Project Manager)
-- De Guzman, John Rez P. (Technical Documentation Writer)
-- Becbec, Wilmarie Faye C. (Technical Documentation Writer)
-- Delicano, Jobea (Application Engineer)
-- Averos, Christian (Database Engineer)
+- Averos, Christian
+- Becbec, Wilmarie Faye
+- De Guzman, John Rez
+- Delicano, Jobea
+- Laurel, Kamille Rose
