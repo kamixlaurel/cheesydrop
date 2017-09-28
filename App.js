@@ -37,8 +37,17 @@ export default class App extends React.Component {
         </Modal>
 
         <Modal visible={this.state.registerVisible} onRequestClose={() => this.setState({ loginVisible: true, registerVisible: false})}>
-          <View style={{backgroundColor: '#f3f3f3', height: 800}}>
-            <Image source={require('./white.jpg')} style={{ width: 360, height: 450, left: 0, top: 100}}/>
+          <View style={{backgroundColor: '#f3f3f3'}}>
+            <View style={{backgroundColor: '#f3f3f3', height: 450, top: 0}}>
+              <Image source={require('./register.jpg')} style={{ width: 360, height: 550, left: 0, top: 0}}/>
+              <FormInput onChangeText={text => this.setState({ usernameInput: text })} value={this.state.usernameInput} style={{backgroundColor: '#e2e2e2', width: 295, height: 35, left:16, fontWeight: 'bold', top: -315}} underlineColorAndroid='transparent'/>
+              <FormInput onChangeText={text => this.setState({ nameInput: text })} value={this.state.nameInput} style={{backgroundColor: '#e2e2e2', width: 295, height: 35, left:16, fontWeight: 'bold', top: -295}} underlineColorAndroid='transparent'/>
+              <FormInput onChangeText={text => this.setState({ passwordInput: text })} value={this.state.passwordInput} style={{backgroundColor: '#e2e2e2', width: 295, height: 35, left:16, fontWeight: 'bold', top: -276}} underlineColorAndroid='transparent'/>
+              <FormInput onChangeText={text => this.setState({ codeInput: text })} value={this.state.codeInput} style={{backgroundColor: '#e2e2e2', width: 295, height: 35, left:16, fontWeight: 'bold', top: -260}} underlineColorAndroid='transparent'/>
+            </View>
+            <View style={{backgroundColor: '#f3f3f3', height: 300, top: 10}}>
+              <Button onPress={() => this.setState({registerVisible: false, loginVisible: true})} buttonStyle={{height: 35, width: 295, left:16, backgroundColor: '#ebcc21', top: 0}} color= '#4a4a4a'title='Sign Up'/>
+            </View>
           </View>
         </Modal>
       </View>
