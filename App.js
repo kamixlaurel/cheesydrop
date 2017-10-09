@@ -14,7 +14,8 @@ export default class App extends React.Component {
       registerVisible: false,
       driverVisible: false,
       profileDriverVisible: false,
-      mapDriverVisible: false,
+      mapDriverNotReadyVisible: false,
+      mapDriverReadyVisible: false,
       registerAs: null,
     };
   }
@@ -22,7 +23,7 @@ export default class App extends React.Component {
   handlePressLogin(){
     this.setState({
       driverVisible: true,
-      mapDriverVisible: true
+      mapDriverNotReadyVisible: true
     })
   }
 
@@ -167,70 +168,83 @@ export default class App extends React.Component {
                 source={require('./header.jpg')} 
                 style={{ width: 370, height: 800, left: 0, top: 0}}
               />
-              <View style={{backgroundColor: 'white', width: 178, height: 60, top: -750, borderBottomWidth: 1.5, borderColor: this.state.profileDriverVisible ? '#ebcc21' : '#000000'}}>
+              <View style={{backgroundColor: 'white', width: 178, height: 60, top: -750, borderBottomWidth: 1.5, borderColor: this.state.mapDriverNotReadyVisible ? '#000000' : '#ebcc21'}}>
                 <Button 
-                  onPress={() => this.setState({ profileDriverVisible: true})} 
+                  onPress={() => this.setState({ mapDriverNotReadyVisible: false, mapDriverReadyVisible: false})} 
                   buttonStyle={{top: 12, height: 60, width: 150, backgroundColor: 'transparent'}} 
-                  color= {this.state.profileDriverVisible ? '#ebcc21' : '#000000'}
+                  color= {this.state.mapDriverNotReadyVisible ? '#000000' : '#ebcc21'}
                   fontSize = {15}
                   fontWeight = 'bold'
                   title='PROFILE'
                 />
               </View>
 
-              <View style={{backgroundColor: 'white', width: 182, height: 60, top: -810, left: 178, borderBottomWidth: 1.5, borderColor: this.state.profileDriverVisible ? '#000000' : '#ebcc21'}}>
+              <View style={{backgroundColor: 'white', width: 182, height: 60, top: -810, left: 178, borderBottomWidth: 1.5, borderColor: this.state.mapDriverNotReadyVisible ? '#ebcc21' : '#000000'}}>
                 <Button 
-                  onPress={() => this.setState({ profileDriverVisible: false})} 
+                  onPress={() => this.setState({ mapDriverNotReadyVisible: true})} 
                   buttonStyle={{top: 12, height: 60, width: 150, backgroundColor: 'transparent'}} 
-                  color= {this.state.profileDriverVisible ? '#000000' : '#ebcc21'}
+                  color= {this.state.mapDriverNotReadyVisible ? '#ebcc21' : '#000000'}
                   fontSize = {15}
                   fontWeight = 'bold'
                   title='MAP'
                 />
               </View>
-
-              <Modal visible={this.state.driverVisible} onRequestClose={() => this.setState({ driverVisible: false})}>
-                <View style={{backgroundColor: '#dcdcdc', height: 520, top: -810}}>
-                  <View style={{height: 435, top: 0}}>
-                  {/* MAP */}
-                    <Image 
-                      source={require('./map.jpg')} 
-                      style={{ width: 370, left: 0, top: -30}}
+                {
+                  this.state.mapDriverNotReadyVisible && 
+                  <View style={{width: 220, height: 10, top: -612, left: 70}}>
+                    <Text style={{bottom: 10, color:'#1f1f1f'}}> Press the button when your shift starts </Text>
+                    <Button
+                      onPress={() => this.setState({ mapDriverReadyVisible: true, mapDriverNotReady: false})}
+                      title='READY'
+                      buttonStyle={{left: 18, backgroundColor: '#ebcc21', width: 150}}
+                      color= 'black'
+                      fontWeight='bold'
                     />
-                    <View style={{backgroundColor: '#ffffff', width: 270, height: 55, left: 47, top: -525, borderColor: '#d0d0d0', borderBottomWidth: 2}}>
-                      <Text style={{ top: 4, fontSize: 25, textAlign: 'center', left:-5.5 }}> Morty Smith </Text>
-                      <Text style={{ top: 3, fontSize: 13, textAlign: 'center', left:-5.5  }}> PREPARING 01:59 </Text>
-                    </View>
-
-                    <View style={{backgroundColor: 'transparent', width: 200, height: 55, left: 80, top: -220, alignItems: 'center'}}>
-                      <Button 
-                        onPress={() => this.setState({ profileDriverVisible: false})} 
-                        buttonStyle={{height: 45, width: 150, backgroundColor: '#ebcc21'}} 
-                        color= '#000000'
-                        fontWeight= 'bold'
-                        fontSize= {16}
-                        title='ONBOARD'
+                  </View>
+                }
+                {
+                  this.state.mapDriverReadyVisible &&
+                  <View style={{backgroundColor: '#dcdcdc', height: 520, top: -810}}>
+                    <View style={{height: 435, top: 0}}>
+                    {/* MAP */}
+                      <Image 
+                        source={require('./map.jpg')} 
+                        style={{ width: 370, left: 0, top: -30}}
                       />
+                      <View style={{backgroundColor: '#ffffff', width: 270, height: 55, left: 47, top: -525, borderColor: '#d0d0d0', borderBottomWidth: 2}}>
+                        <Text style={{ top: 4, fontSize: 25, textAlign: 'center', left:-5.5 }}> Morty Smith </Text>
+                        <Text style={{ top: 3, fontSize: 13, textAlign: 'center', left:-5.5  }}> PREPARING 01:59 </Text>
+                      </View>
+
+                      <View style={{backgroundColor: 'transparent', width: 200, height: 55, left: 80, top: -220, alignItems: 'center'}}>
+                        <Button 
+                          onPress={() => this.setState({ profileDriverVisible: false})} 
+                          buttonStyle={{height: 45, width: 150, backgroundColor: '#ebcc21'}} 
+                          color= '#000000'
+                          fontWeight= 'bold'
+                          fontSize= {16}
+                          title='ONBOARD'
+                        />
+                      </View>
+                    {/* MAP */}
                     </View>
-                  {/* MAP */}
-                  </View>
 
-                  <View style={{backgroundColor: 'white', width: 178, height: 70, top: 2, borderBottomWidth: 15, borderBottomColor: 'white', borderTopWidth: 15, borderTopColor: 'white', borderRightWidth: .5, borderRightColor: '#bdbebf'}}>
-                    <Text style={{ top: 2, fontSize: 20, textAlign: 'center', fontWeight: 'bold' }}> 2 MINUTES </Text>
-                    <Text style={{ top: 0, fontSize: 11, textAlign: 'center' }}> Estimated Time of Arrival </Text>
-                  </View>
+                    <View style={{backgroundColor: 'white', width: 178, height: 70, top: 2, borderBottomWidth: 15, borderBottomColor: 'white', borderTopWidth: 15, borderTopColor: 'white', borderRightWidth: .5, borderRightColor: '#bdbebf'}}>
+                      <Text style={{ top: 2, fontSize: 20, textAlign: 'center', fontWeight: 'bold' }}> 2 MINUTES </Text>
+                      <Text style={{ top: 0, fontSize: 11, textAlign: 'center' }}> Estimated Time of Arrival </Text>
+                    </View>
 
-                  <View style={{backgroundColor: 'white', width: 187, height: 70, top: -68, left: 178, borderBottomWidth: 15, borderBottomColor: 'white', borderTopWidth: 15, borderTopColor: 'white', borderLeftWidth: .5, borderLeftColor: '#bdbebf'}}>
-                    <Text style={{ top: 2, fontSize: 20, textAlign: 'center', fontWeight: 'bold' }}> 3:05:12 </Text>
-                    <Text style={{ top: 0, fontSize: 11, textAlign: 'center' }}> Countdown Before School Starts </Text>
-                  </View>
-                </View>   
-              </Modal>
-            </View>
-          </DrawerLayoutAndroid>
-        </Modal>
-        {/* DRIVER VIEW */}
-      </View>
+                    <View style={{backgroundColor: 'white', width: 187, height: 70, top: -68, left: 178, borderBottomWidth: 15, borderBottomColor: 'white', borderTopWidth: 15, borderTopColor: 'white', borderLeftWidth: .5, borderLeftColor: '#bdbebf'}}>
+                      <Text style={{ top: 2, fontSize: 20, textAlign: 'center', fontWeight: 'bold' }}> 3:05:12 </Text>
+                      <Text style={{ top: 0, fontSize: 11, textAlign: 'center' }}> Countdown Before School Starts </Text>
+                    </View>
+                  </View>   
+                }
+              </View>
+            </DrawerLayoutAndroid>
+          </Modal>
+          {/* DRIVER VIEW */}
+        </View>
     );
   }
 }
