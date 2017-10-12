@@ -262,21 +262,22 @@ export default class App extends React.Component {
     try {
       //checkvalues
       if (validateRegister(this.state.name.trim(), this.state.username.trim(), this.state.password.trim())){
+        registerInfo = {
+          fullname: this.state.name,
+          username: this.state.username,
+          password: this.state.password,
+          user_type: (this.state.modalState === 'guardian') ? 'GRD' : 'DRV'
+        };
+        //axios post register
+        axios.post(api + '/api/users/register', registerInfo)
+          .then(response => {
+            ToastAndroid.show(reponse.data.message, ToastAndroid.SHORT);
+          });
+        //axios get login  
+      } else {
         throw 'Empty Field(s)';
       }
       
-      registerInfo = {
-        fullname: this.state.name,
-        username: this.state.username,
-        password: this.state.password,
-        user_type: (this.state.modalState === 'guardian') ? 'GRD' : 'DRV'
-      };
-      //axios post register
-      axios.post(api + '/api/users/register', registerInfo)
-        .then(response => {
-          ToastAndroid.show(reponse.data.message, ToastAndroid.SHORT);
-        });
-      //axios get login
     } catch (e) {
       ToastAndroid.show(e.toString(), ToastAndroid.SHORT)
     }
