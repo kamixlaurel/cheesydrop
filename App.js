@@ -68,6 +68,7 @@ export default class App extends React.Component {
               color= '#1f1f1f' 
               title='LOGIN' 
               fontWeight='bold'
+              onPress={this.loginPress}
             />
             <Button 
               onPress={()=>{this.setState({modalState: 'register', username: '', password: ''})}}
@@ -282,10 +283,27 @@ export default class App extends React.Component {
     }
   }
 
+  loginPress = () => {
+    try {
+      if (this.validateLogin(this.state.username, this.state.password)) {
+        const payload = {
+          username: this.state.username,
+          password: this.state.password
+        };
+        axios.post(api + '/api/users/login', payload)
+          .then(response => {
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+          });
+      }
+    } catch(e) {
+      //
+    } 
+  }
+
   registerPress = () => {
     try {
       //checkvalues
-      if (this.forceUpdatevalidateRegister(this.state.name.trim(), this.state.username.trim(), this.state.password.trim())){
+      if (this.validateRegister(this.state.name.trim(), this.state.username.trim(), this.state.password.trim())){
         const registerInfo = {
           fullname: this.state.name,
           username: this.state.username,
