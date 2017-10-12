@@ -258,11 +258,35 @@ export default class App extends React.Component {
     return (re.test(username) === re.test(password) === true);
   }
 
+  setCodePress = () => {
+    try {
+      const payload = {
+        id: this.state.sessionId,
+        code: this.state.code
+      };
+      axios.post(api + '/api/users/code', payload)
+        .then(response => {
+          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+        });
+    } catch (e) {
+    }
+  }
+
+  generateCode() {
+    try {
+      // generate code
+      // set generated to this.state.code
+      //  
+    } catch (e) {
+
+    }
+  }
+
   registerPress = () => {
     try {
       //checkvalues
-      if (validateRegister(this.state.name.trim(), this.state.username.trim(), this.state.password.trim())){
-        registerInfo = {
+      if (this.forceUpdatevalidateRegister(this.state.name.trim(), this.state.username.trim(), this.state.password.trim())){
+        const registerInfo = {
           fullname: this.state.name,
           username: this.state.username,
           password: this.state.password,
@@ -273,7 +297,23 @@ export default class App extends React.Component {
           .then(response => {
             ToastAndroid.show(reponse.data.message, ToastAndroid.SHORT);
           });
-        //axios get login  
+        
+        //axios get login
+        const payload = {
+          username: this.state.username,
+          password: this.state.password
+        };
+        axios.post(api + '/api/users/login', payload)
+          .then(response => {
+            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+            if(response.data.id)
+              this.setState({
+                sessionId: response.data.id,
+                name: '',
+                username: '',
+                password: '',
+              });
+          });
       } else {
         throw 'Empty Field(s)';
       }
