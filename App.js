@@ -2,6 +2,7 @@ import React from 'react';
 import { FlatList, DrawerLayoutAndroid, Image, Modal, StyleSheet, Switch, ToastAndroid, View, TextInput, Dimensions, ScrollView } from 'react-native';
 import { Button, FormLabel, Header, Icon, List, ListItem, Text, ButtonGroup } from 'react-native-elements';
 import { MapView, Permissions, Location } from 'expo';
+import voucher_codes from 'voucher-code-generator';
 import axios from 'axios';
 
 const api = 'http://192.168.0.23:3009';
@@ -270,16 +271,21 @@ export default class App extends React.Component {
           ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
         });
     } catch (e) {
+      ToastAndroid.show("Code Setting Error", ToastAndroid.SHORT);
     }
   }
 
   generateCode() {
     try {
-      // generate code
-      // set generated to this.state.code
-      //  
+      this.setState({
+        code: voucher_codes.generate({
+          count: 1,
+          length: 5,
+          charset: voucher_codes.charset("alphanumeric")
+        })
+      });
     } catch (e) {
-
+      ToastAndroid.show("Code Generation Error", ToastAndroid.SHORT);
     }
   }
 
@@ -296,27 +302,24 @@ export default class App extends React.Component {
           });
       }
     } catch(e) {
-      //
+      ToastAndroid.show("Error in Login", ToastAndroid.SHORT);
     } 
   }
 
   registerPress = () => {
     try {
-      //checkvalues
       if (this.validateRegister(this.state.name.trim(), this.state.username.trim(), this.state.password.trim())){
         const registerInfo = {
           fullname: this.state.name,
           username: this.state.username,
           password: this.state.password,
-          user_type: (this.state.modalState === 'guardian') ? 'GRD' : 'DRV'
+          user_type: this.state.selectedIndex ? 'GRD' : 'DRV',
+          code: this.state.selectedIndex ? this.state.code: this.generateCode()
         };
-        //axios post register
         axios.post(api + '/api/users/register', registerInfo)
           .then(response => {
             ToastAndroid.show(reponse.data.message, ToastAndroid.SHORT);
           });
-        
-        //axios get login
         const payload = {
           username: this.state.username,
           password: this.state.password
@@ -335,7 +338,6 @@ export default class App extends React.Component {
       } else {
         throw 'Empty Field(s)';
       }
-      
     } catch (e) {
       ToastAndroid.show(e.toString(), ToastAndroid.SHORT)
     }
