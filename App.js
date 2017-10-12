@@ -4,6 +4,8 @@ import { Button, FormLabel, Header, Icon, List, ListItem, Text, ButtonGroup } fr
 import { MapView, Permissions, Location } from 'expo';
 import axios from 'axios';
 
+const api = 'http://192.168.0.23:3009';
+
 export default class App extends React.Component {
   constructor(props, ctx) {
     super(props, ctx);
@@ -246,16 +248,37 @@ export default class App extends React.Component {
 
   };
 
+  validateRegister(name, username, password) {
+    const re = new RegExp('^[a-zA-Z0-9]{1,}$');
+    return (re.test(name) === re.test(username) === re.test(password) === true);
+  }
+
+  validateLogin(username, password) {
+    const re = new RegExp('^[a-zA-Z0-9]{1,}$');
+    return (re.test(username) === re.test(password) === true);
+  }
+
   registerPress = () => {
     try {
       //checkvalues
-      registerInfo = {
-        //table cols = statename
+      if (validateRegister(this.state.name.trim(), this.state.username.trim(), this.state.password.trim())){
+        throw 'Empty Field(s)';
       }
+      
+      registerInfo = {
+        fullname: this.state.name,
+        username: this.state.username,
+        password: this.state.password,
+        user_type: (this.state.modalState === 'guardian') ? 'GRD' : 'DRV'
+      };
       //axios post register
+      axios.post(api + '/api/users/register', registerInfo)
+        .then(response => {
+          ToastAndroid.show(reponse.data.message, ToastAndroid.SHORT);
+        });
       //axios get login
     } catch (e) {
-      
+      ToastAndroid.show(e.toString(), ToastAndroid.SHORT)
     }
   }
   
