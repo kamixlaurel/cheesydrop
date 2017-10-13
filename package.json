@@ -26,6 +26,7 @@
     "react-native-elements": "^0.15.0",
     "react-native-keyboard-aware-view": "0.0.12",
     "react-native-tab-view": "0.0.69",
-    "rn-viewpager": "^1.2.4"
+    "rn-viewpager": "^1.2.4",
+    "voucher-code-generator": "^1.1.1"
   }
 }
