@@ -260,30 +260,13 @@ export default class App extends React.Component {
     return (re.test(username) === re.test(password) === true);
   }
 
-  setCodePress = () => {
-    try {
-      const payload = {
-        id: this.state.sessionId,
-        code: this.state.code
-      };
-      axios.post(api + '/api/users/code', payload)
-        .then(response => {
-          ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-        });
-    } catch (e) {
-      ToastAndroid.show("Code Setting Error", ToastAndroid.SHORT);
-    }
-  }
-
   generateCode() {
     try {
-      this.setState({
-        code: voucher_codes.generate({
+      return voucher_codes.generate({
           count: 1,
           length: 5,
           charset: voucher_codes.charset("alphanumeric")
-        })
-      });
+        });
     } catch (e) {
       ToastAndroid.show("Code Generation Error", ToastAndroid.SHORT);
     }
