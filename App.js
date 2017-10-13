@@ -260,6 +260,23 @@ export default class App extends React.Component {
     return (re.test(username) === re.test(password) === true);
   }
 
+  verifyCode() {
+    try {
+      const payload = {
+        code: this.state.code
+      };
+      axios.post(api + '/api/users/codeverify', payload)
+        .then(response => {
+          this.setState({
+            valid: response.data.valid
+          });
+          return this.state.code;
+        });
+    } catch (e) {
+      //
+    }
+  }
+
   generateCode() {
     try {
       return voucher_codes.generate({
@@ -297,27 +314,29 @@ export default class App extends React.Component {
           username: this.state.username,
           password: this.state.password,
           user_type: this.state.selectedIndex ? 'GRD' : 'DRV',
-          code: this.state.selectedIndex ? this.state.code: this.generateCode()
+          code: this.state.selectedIndex ? this.verifyCode() : this.generateCode()
         };
-        axios.post(api + '/api/users/register', registerInfo)
-          .then(response => {
-            ToastAndroid.show(reponse.data.message, ToastAndroid.SHORT);
-          });
-        const payload = {
-          username: this.state.username,
-          password: this.state.password
-        };
-        axios.post(api + '/api/users/login', payload)
-          .then(response => {
-            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-            if(response.data.id)
-              this.setState({
-                sessionId: response.data.id,
-                name: '',
-                username: '',
-                password: '',
-              });
-          });
+        if (this.state.valid === true) {
+          axios.post(api + '/api/users/register', registerInfo)
+            .then(response => {
+              ToastAndroid.show(reponse.data.message, ToastAndroid.SHORT);
+            });
+          const payload = {
+            username: this.state.username,
+            password: this.state.password
+          };
+          axios.post(api + '/api/users/login', payload)
+            .then(response => {
+              ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+              if(response.data.id)
+                this.setState({
+                  sessionId: response.data.id,
+                  name: '',
+                  username: '',
+                  password: '',
+                });
+            });
+        }
       } else {
         throw 'Empty Field(s)';
       }
