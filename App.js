@@ -5,7 +5,7 @@ import { MapView, Permissions, Location } from 'expo';
 import voucher_codes from 'voucher-code-generator';
 import axios from 'axios';
 
-const api = 'http://192.168.0.23:3009';
+const api = 'http://192.168.254.102:3009';
 
 export default class App extends React.Component {
   constructor(props, ctx) {
@@ -20,6 +20,7 @@ export default class App extends React.Component {
       password: '',
       location: '',
       code: '',
+      valid: true,
       selectedIndex: 0,
       markerCoord: {
         latitude: 0,
@@ -30,7 +31,9 @@ export default class App extends React.Component {
         longitude: 120.9842,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
-      }
+      },
+      sessionId: null,
+      sessionType: null
     };
   }
 
@@ -103,6 +106,13 @@ export default class App extends React.Component {
               selectedBackgroundColor={'#ebcc21'}
               />
             <Button 
+              onPress={()=>{ this.setState({modalState: 'register'})}}
+              buttonStyle={styles.button} 
+              color= '#1f1f1f' 
+              title='< BACK' 
+              fontWeight='bold'
+            />
+            <Button 
               onPress={this.checkInput}
               buttonStyle={styles.button} 
               color= '#1f1f1f' 
@@ -146,7 +156,7 @@ export default class App extends React.Component {
                 <MapView.Marker draggable coordinate={this.state.markerCoord} />
               </MapView>
               <FormLabel style={styles.formLabel}>Code (Provided by driver)</FormLabel>
-              <TextInput style={styles.formInput} underlineColorAndroid='transparent' onChangeText={(code)=>{this.setState({code})}} value={this.state.code}/>
+              <TextInput style={styles.formInput} underlineColorAndroid='transparent' onSubmitEditing={this.verifyCode} onChangeText={(code)=>{this.setState({code})}} value={this.state.code}/>
               <Button 
                 onPress={()=>{ this.setState({modalState: 'register'})}}
                 buttonStyle={styles.button} 
@@ -205,6 +215,14 @@ export default class App extends React.Component {
             </View>
             </View>
     }
+
+    mainContent = <Text>hi there</Text>
+    if (this.state.sessionType=='DRV'){
+      mainContent = <Text> DRIVER </Text>
+    } else if(this.state.sessionType=='GRD'){
+      mainContent = <Text> GUARDIAN </Text>
+    }
+    
     return (
        <View style={styles.view} >
         <Modal
@@ -214,6 +232,9 @@ export default class App extends React.Component {
         >
           {modalContent}
         </Modal>
+        <View>
+          {mainContent}
+        </View>
       </View>
     );
   }
@@ -241,12 +262,14 @@ export default class App extends React.Component {
     if (status !== 'granted') {
       ToastAndroid.show('Permission to access location was denied',ToastAndroid.SHORT)
     }
+
+    let location = await Location.getCurrentPositionAsync({});
+    this.setState({ markerCoord: location.coords, region: Object.assign(location.coords, {latitudeDelta: 0.005, longitudeDelta: 0.005}) });
     }catch(e){
       ToastAndroid.show('Permission to access location was denied',ToastAndroid.SHORT)
     }
     
-    let location = await Location.getCurrentPositionAsync({});
-    this.setState({ markerCoord: location.coords, region: Object.assign(location.coords, {latitudeDelta: 0.005, longitudeDelta: 0.005}) });
+   
 
   };
 
@@ -260,20 +283,14 @@ export default class App extends React.Component {
     return (re.test(username) === re.test(password) === true);
   }
 
-  verifyCode() {
+  verifyCode = async () => {
     try {
-      const payload = {
-        code: this.state.code
-      };
-      axios.post(api + '/api/users/codeverify', payload)
+      await axios.post(api + '/cheesydrop/users/codeverify', {code: this.state.code})
         .then(response => {
-          this.setState({
-            valid: response.data.valid
-          });
-          return this.state.code;
+          this.setState({valid: response.data.valid})
         });
     } catch (e) {
-      //
+      ToastAndroid.show(e, ToastAndroid.LONG)
     }
   }
 
@@ -283,7 +300,7 @@ export default class App extends React.Component {
           count: 1,
           length: 5,
           charset: voucher_codes.charset("alphanumeric")
-        });
+        })[0];
     } catch (e) {
       ToastAndroid.show("Code Generation Error", ToastAndroid.SHORT);
     }
@@ -292,21 +309,51 @@ export default class App extends React.Component {
   loginPress = () => {
     try {
       if (this.validateLogin(this.state.username, this.state.password)) {
-        const payload = {
-          username: this.state.username,
-          password: this.state.password
-        };
-        axios.post(api + '/api/users/login', payload)
-          .then(response => {
-            ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-          });
+        this.login();
       }
     } catch(e) {
       ToastAndroid.show("Error in Login", ToastAndroid.SHORT);
     } 
   }
 
-  registerPress = () => {
+  login(){
+    const payload = {
+      username: this.state.username,
+      password: this.state.password
+    };
+    axios.post(api + '/cheesydrop/users/login', payload)
+      .then(response => {
+        ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
+        if(response.data.id)
+          this.setState({
+            sessionId: response.data.id,
+            name: response.data.fullname,
+            username: response.data.username,
+            sessionType: response.data.user_type,
+            modalVisible: false
+          });
+      });
+  }
+
+  addSchool(){
+    if (!this.state.selectedIndex){
+      axios.post(api + '/cheesydrop/location/school',
+        { id: this.state.sessionId, 
+          location: this.state.location,
+          lttd: this.state.markerCoord.latitude,
+          lngtd: this.state.markerCoord.longitude })
+        .catch(err => ToastAndroid.show(err.response.data.error, ToastAndroid.LONG))
+    }
+  }
+
+  addLocation(){
+    axios.post(api + '/cheesydrop/location/', 
+      { lttd: this.state.markerCoord.latitude,
+        lngtd: this.state.markerCoord.longitude })
+      .catch(err => ToastAndroid.show(err.response.data.error, ToastAndroid.LONG))
+  }
+
+  registerPress = async () => {
     try {
       if (this.validateRegister(this.state.name.trim(), this.state.username.trim(), this.state.password.trim())){
         const registerInfo = {
@@ -314,28 +361,19 @@ export default class App extends React.Component {
           username: this.state.username,
           password: this.state.password,
           user_type: this.state.selectedIndex ? 'GRD' : 'DRV',
-          code: this.state.selectedIndex ? this.verifyCode() : this.generateCode()
+          code: this.state.selectedIndex ? this.state.code : this.generateCode()
         };
-        if (this.state.valid === true) {
-          axios.post(api + '/api/users/register', registerInfo)
-            .then(response => {
-              ToastAndroid.show(reponse.data.message, ToastAndroid.SHORT);
-            });
-          const payload = {
-            username: this.state.username,
-            password: this.state.password
-          };
-          axios.post(api + '/api/users/login', payload)
+        if (this.state.valid) {
+          axios.post(api + '/cheesydrop/users/register', registerInfo)
             .then(response => {
               ToastAndroid.show(response.data.message, ToastAndroid.SHORT);
-              if(response.data.id)
-                this.setState({
-                  sessionId: response.data.id,
-                  name: '',
-                  username: '',
-                  password: '',
-                });
-            });
+            })
+            .catch(err => ToastAndroid.show(err.response.data.error, ToastAndroid.LONG))
+            .then(this.login())
+            .then(this.addSchool())
+            .then(this.addLocation())
+        } else {
+          ToastAndroid.show('Invalid code', ToastAndroid.SHORT);
         }
       } else {
         throw 'Empty Field(s)';
