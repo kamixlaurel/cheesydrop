@@ -1,6 +1,7 @@
 import React from 'react';
 import { FlatList, DrawerLayoutAndroid, Image, Modal, StyleSheet, Switch, ToastAndroid, View, TextInput, Dimensions, ScrollView } from 'react-native';
 import { Button, FormLabel, Header, Icon, List, ListItem, Text, ButtonGroup } from 'react-native-elements';
+import { PagerTabIndicator, IndicatorViewPager, PagerTitleIndicator, PagerDotIndicator } from 'rn-viewpager';
 import { MapView, Permissions, Location } from 'expo';
 import voucher_codes from 'voucher-code-generator';
 import axios from 'axios';
@@ -218,9 +219,9 @@ export default class App extends React.Component {
 
     mainContent = <Text>hi there</Text>
     if (this.state.sessionType=='DRV'){
-      mainContent = <Text> DRIVER </Text>
+      mainContent = <DriverView sessionId={this.state.sessionId} />
     } else if(this.state.sessionType=='GRD'){
-      mainContent = <Text> GUARDIAN </Text>
+      mainContent = <GuardianView sessionId={this.state.sessionId} />
     }
     
     return (
@@ -385,6 +386,73 @@ export default class App extends React.Component {
   
   checkInput = () => {
     this.setState({modalState: this.state.selectedIndex ? 'guardian' : 'driver'})
+  }
+}
+
+class DriverView extends React.Component{
+   constructor(props, ctx){
+    super(props, ctx);
+   }
+
+   render(){
+     return (
+       <View>
+        <Header
+          centerComponent={<Text style={{fontSize: 20}}>CHEESY<Text style={{fontWeight: 'bold'}}>DROP</Text></Text>}
+        />
+        <View style={{flex:1, marginTop: 70}}>
+          <IndicatorViewPager
+              style={{height:600, flexDirection: 'column-reverse'}}
+              indicator={this._renderTitleIndicator()}>
+              <View>
+                {/*MAP*/}
+              </View>
+              <View>
+                {/*STUDENT LIST*/}
+              </View>
+              <View>
+                {/*PROFILE*/}
+              </View>
+          </IndicatorViewPager>
+        </View>
+       </View>
+     );
+   }
+
+  _renderTitleIndicator() {
+    return <PagerTitleIndicator titles={['MAP', 'STUDENTS', 'PROFILE']} />;
+  }
+}
+
+class GuardianView extends React.Component{
+   constructor(props, ctx){
+    super(props, ctx);
+   }
+
+   render(){
+     return (
+       <View>
+        <Header
+          centerComponent={<Text style={{fontSize: 20}}>CHEESY<Text style={{fontWeight: 'bold'}}>DROP</Text></Text>}
+        />
+        <View style={{flex:1, marginTop: 70}}>
+          <IndicatorViewPager
+              style={{height:600, flexDirection: 'column-reverse'}}
+              indicator={this._renderTitleIndicator()}>
+              <View>
+                {/*MAP*/}
+              </View>
+              <View>
+                {/*PROFILE*/}
+              </View>
+          </IndicatorViewPager>
+        </View>
+       </View>
+     );
+   }
+
+  _renderTitleIndicator() {
+    return <PagerTitleIndicator titles={['MAP', 'PROFILE']} />;
   }
 }
 
